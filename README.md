@@ -8,10 +8,20 @@ Generally inspired by:
 
 Usage of SHOULD, MUST etc. keywords in this document MUST be compliant to [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
+1. [Structure](#structure)  
+   1. [Modules](#modules)
+   2. [Environment](#environment)
+   3. [Branching](#branching)
+2. [Usage](#usage)
+   1. [Setup](#setup)
+   2. [Documentation](#documentation)
+
 ## Structure
 
-- `README.md`: documentation on the project IaC (setup, structure, usage)
-- `Makefile`: 
+- `README.md`: high-level documentation of this repo
+- `Makefile`: scripts to launch common operations in the default way (e.g. generate docs)
+- `.gitignore`: files/folders that should be ignored by Git
+- `.tflint.hcl`: TFLint configuration files
 - `./modules`: contains module sources which are specific to this project
   - at some point some (or all) of them may be moved to their own git repos (depending on their size, usage, update frequency etc)
 - `./environment`: contains project infrastructure sources
@@ -47,12 +57,12 @@ Each environment shall be kept under a separate branch to facilite PR controlled
 
 ### Setup
 
-The following prerequisites should be installed on any environment to work with the project sources.
+The following prerequisites should be installed on any environment to work with the project.
 
 | Name | Version |
 | ---- | ------- |
 | [Terraform](https://www.terraform.io/) | 1.3.6 |
-| [Lefthook](https://github.com/evilmartians/lefthook) | 0.7.7 |
+| [Lefthook](https://github.com/evilmartians/lefthook) | 1.2.6 |
 | [tfsec](https://github.com/aquasecurity/tfsec) | 1.28.1 |
 | [TFLint](https://github.com/terraform-linters/tflint) | 0.43.0 |
 | [terraform-docs](https://github.com/terraform-docs/terraform-docs) | 0.16.0 |
