@@ -16,7 +16,7 @@ LAYERS = $(shell find ./environment/* -maxdepth 1 -type d)
 LAYERS_READMES = $(foreach LAYER,$(LAYERS),$(LAYER)/README.md)
 
 .PHONY: docs
-docs: $(MODULES_READMES) $(LAYERS_READMES)
+docs: $(MODULES_READMES)
 	@echo "All READMEs successfully generated"
 
 ./modules/%/README.md : ./modules/%/*.tf
