@@ -1,0 +1,15 @@
+### Terraform
+.terraform
+
+### tfsec (e.g. cachge files)
+.tfsec
+
+### TFLint (e.g. plugins)
+.tflint.d
+
+### Vscode
+.vscode/
+
+### SSH
+
+*.pem
