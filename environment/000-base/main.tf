@@ -14,6 +14,15 @@ module "vpc" {
   public_subnet_tags = {
     Tier = "Public subnet"
   }
+
+  database_subnets = var.vpc.database_subnets
+  database_subnet_tags = {
+    "UsedBy" = "main_db"
+  }
+  create_database_subnet_group       = true
+  create_database_subnet_route_table = true
+
+
   enable_nat_gateway   = true
   enable_dns_hostnames = true
 }
