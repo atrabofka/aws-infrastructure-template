@@ -1,7 +1,13 @@
+layer_metadata = {
+  environment = "dev"
+  layer       = "001-data"
+  project     = "aws-infrastructure-template"
+}
+
 aws = {
   region = "us-west-2"
   # TODO - generate avaliability zones automaticaly from the specified region
-  azs = ["us-west-2a", "us-west-2b", "us-west-2c"]
+  azs = ["us-west-2a", "us-west-2b"]
 }
 
 main_db = {
