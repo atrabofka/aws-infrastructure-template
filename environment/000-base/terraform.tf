@@ -12,15 +12,3 @@ terraform {
   }
   required_version = ">= 1.3.6"
 }
-
-provider "aws" {
-  region = "us-west-2"
-  default_tags {
-    tags = {
-      Environment = "dev"
-      Project     = "aws-infrastructure-template"
-      ManagedBy   = "Terraform"
-      Layer       = "000-base"
-    }
-  }
-}

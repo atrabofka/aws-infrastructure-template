@@ -1,8 +1,25 @@
-data "aws_subnets" "database_subnets" {
-  filter {
-    name   = "tag:UsedBy"
-    values = ["main_db"]
-  }
+module "main_db_security_group" {
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "4.16.1"
+
+  name        = var.main_db_security_group_name
+  description = "Allow ingress to PostgreSQL only within VPC"
+  vpc_id      = data.aws_vpc.main_db_vpc.id
+
+  # Ingress
+  ingress_with_cidr_blocks = [
+    {
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      description = "PostgreSQL access within VPC"
+      cidr_blocks = data.aws_vpc.main_db_vpc.cidr_block
+    },
+  ]
+
+  depends_on = [
+    data.aws_vpc.main_db_vpc
+  ]
 }
 
 module "main_db" {
@@ -14,6 +31,7 @@ module "main_db" {
   # Database
   engine         = "postgres"
   engine_version = var.main_db.engine_version
+  username       = "vaitalvision"
 
   # Instance
   instance_class = var.main_db.tier
@@ -24,13 +42,16 @@ module "main_db" {
   storage_encrypted     = var.main_db.encrypted
 
   # Network
-  subnet_ids = data.aws_subnets.database_subnets.ids
-  multi_az   = var.main_db.multiaz
+  db_subnet_group_name   = format("%s-%s", var.layer_metadata.project, var.layer_metadata.environment)
+  subnet_ids             = data.aws_subnets.main_db_subnets.ids
+  multi_az               = var.main_db.multiaz
+  vpc_security_group_ids = [module.main_db_security_group.security_group_id]
 
   # DB Parameter Group
   family = var.main_db.family
-}
 
-# output "as_is" {
-#   value = data.aws_subnets.database_subnets.ids
-# }
+  depends_on = [
+    module.main_db_security_group,
+    data.aws_subnets.main_db_subnets
+  ]
+}
