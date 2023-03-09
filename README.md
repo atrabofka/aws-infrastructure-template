@@ -60,18 +60,17 @@ Each environment shall be kept under a separate branch to facilite PR controlled
 
 The following prerequisites SHOULD be available on any environment to work with the project. Please refer to the respecvite tools documentation for installation steps.
 
+> RECOMMENDED prerequisites installation method on MacOS is `brew install`.  
+> On a local workstation, Terraform is RECOMMENDED to be installed via `tfenv`  
+
 | Name | Version |
 | ---- | ------- |
 | [Terraform](https://www.terraform.io/) | 1.3.6 |
 | [Lefthook](https://github.com/evilmartians/lefthook) | 1.2.6 |
-| [tfsec](https://github.com/aquasecurity/tfsec) | 1.28.1 |
+| [tfsec](https://github.com/aquasecurity/tfsec) | 1.28.0 |
 | [TFLint](https://github.com/terraform-linters/tflint) | 0.43.0 |
 | [terraform-docs](https://github.com/terraform-docs/terraform-docs) | 0.16.0 |
 | [GNU Make](https://www.gnu.org/software/make/) | 3.81 |
-
-> NOTES:  
-> RECOMMENDED prerequisites installation method on MacOS is `brew install`.  
-> On a local workstation, Terraform is RECOMMENDED to be installed via `tfenv`  
 
 After making sure that all prequisites are available, run the following command in the root directory:
 

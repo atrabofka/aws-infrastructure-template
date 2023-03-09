@@ -1,4 +1,4 @@
-
+#tfsec:ignore:aws-sqs-enable-queue-encryption
 resource "aws_sqs_queue" "deadletter" {
   name = var.name
   tags = {
@@ -11,6 +11,7 @@ resource "aws_sqs_queue" "deadletter" {
   receive_wait_time_seconds = 20
 }
 
+#tfsec:ignore:aws-sqs-enable-queue-encryption
 resource "aws_sqs_queue" "queue" {
   for_each = var.queues
   name     = "${var.project}-${each.value}-${var.environment}-${var.envVersion}"

@@ -4,7 +4,7 @@ MODULES = $(shell find ./modules/* -maxdepth 1 -type d)
 LAYERS = $(shell find ./environment -name "[0-9]*" -maxdepth 1 -type d)
 LAYERS_TERRAFORM_DIRS = $(foreach LAYER,$(LAYERS),$(LAYER)/.terraform)
 
-### Setup
+### setup
 # SHOULD be executed when the project is cloned for the 1st time.
 # All the prerequisites defined in the README MUST installed before.
 
@@ -13,7 +13,7 @@ setup:
 	@lefthook install
 	@tflint --init
 
-### Init
+### init
 # SHOULD be executed for `terraform init` in all environment layers
 
 .PHONY: init
@@ -25,7 +25,7 @@ init: $(LAYERS_TERRAFORM_DIRS)
 	@echo "Initializing $(dir $@)"
 	@cd $(dir $@); terraform init
 
-### Docs
+### docs
 # SHOULD be executed to update modules & environment layers READMEs
 
 MODULES_READMES = $(foreach MODULE,$(MODULES),$(MODULE)/README.md)
@@ -36,18 +36,18 @@ docs: $(MODULES_READMES) $(LAYERS_READMES)
 	@echo "All READMEs are up-to-date!"
 
 ./modules/%/README.md : ./modules/%/*.tf
-	@echo "Generating $@"
+	@echo "Running terraform-docs on $(dir $@)"
 	@terraform-docs markdown $(subst /README.md,,$@) \
 		--output-file README.md \
 		--output-mode replace
 
 ./environment/%/README.md : ./environment/%/*.tf
-	@echo "Generating $@"
+	@echo "Running terraform-docs on $(dir $@)"
 	@terraform-docs markdown $(subst /README.md,,$@) \
 		--output-file README.md \
 		--output-mode replace
 
-### TFlint
+### tflint
 # SHOULD be executed to validate TF code via TFLint
 
 # Files indicating last successful TFlint execution in the layer
@@ -60,4 +60,19 @@ tflint: $(LAYERS_TFLINT_OKS)
 ./environment/%/.tflint.ok: ./environment/%/*.tf
 	@echo "Running TFlint on $(dir $@)" 
 	@tflint --chdir=$(dir $@) --module
+	@touch $@
+
+### tfsec
+# SHOULD be executed to validate TF code via tfsec
+
+# Files indicating last successful TFlint execution in the layer
+LAYERS_TFSEC_OKS = $(foreach LAYER,$(LAYERS),$(LAYER)/.tfsec.ok)
+
+.PHONY: tfsec
+tfsec: $(LAYERS_TFSEC_OKS)
+	@echo "All environment layers tfsec checks are up-to-date!"
+
+./environment/%/.tfsec.ok: ./environment/%/*.tf
+	@echo "Running tfsec on $(dir $@)" 
+	@tfsec --config-file tfsec.yml --tfvars-file $(dir $@)/terraform.tfvars $(dir $@)
 	@touch $@
