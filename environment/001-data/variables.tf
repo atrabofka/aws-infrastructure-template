@@ -25,16 +25,23 @@ variable "aws" {
 variable "main_db" {
   description = "Main DB configurations"
   type = object({
-    name                = string
-    family              = string
-    engine_version      = string
-    tier                = string
-    multiaz             = bool
-    disk_size           = number
-    disk_max_size       = number
-    internet_gateway    = bool
-    deletion_protection = bool
-    backup_retention    = number
-    encrypted           = bool
+    # Engine
+    family         = string
+    engine_version = string
+
+    # Instance
+    tier                         = string
+    performance_insights_enabled = bool
+    deletion_protection          = bool
+
+    # Storage
+    disk_size          = number
+    disk_max_size      = number
+    backup_retention   = number
+    storage_encryption = bool
+
+    # Network
+    internet_gateway = bool
+    multiaz          = bool
   })
 }

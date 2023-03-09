@@ -11,16 +11,23 @@ aws = {
 }
 
 main_db = {
-  name                = "aws-infrastructure-template"
-  family              = "postgres12"
-  engine_version      = "12.12"
-  tier                = "db.t4g.micro"
-  multiaz             = false
-  disk_size           = "10"
-  disk_max_size       = "15"
-  internet_gateway    = false
-  deletion_protection = false
-  backup_retention    = 3
-  encrypted           = false
+  # Engine
+  family         = "postgres12"
+  engine_version = "12.12"
+
+  # Instance
+  tier                         = "db.t4g.micro"
+  performance_insights_enabled = true
+  deletion_protection          = true
+
+  # Storage
+  disk_size        = "10"
+  disk_max_size    = "15"
+  encrypted        = true
+  backup_retention = 3
+
+  # Network
+  internet_gateway = false
+  multiaz          = false
 }
 

@@ -29,17 +29,20 @@ module "main_db" {
   identifier = var.main_db.name
 
   # Database
-  engine         = "postgres"
-  engine_version = var.main_db.engine_version
-  username       = "vaitalvision"
+  engine                              = "postgres"
+  engine_version                      = var.main_db.engine_version
+  username                            = "vaitalvision"
 
   # Instance
-  instance_class = var.main_db.tier
+  instance_class               = var.main_db.tier
+  performance_insights_enabled = var.main_db.performance_insights_enabled
+  deletion_protection          = var.main_db.deletion_protection
 
   # Storage
-  allocated_storage     = var.main_db.disk_size
-  max_allocated_storage = var.main_db.disk_max_size
-  storage_encrypted     = var.main_db.encrypted
+  allocated_storage       = var.main_db.disk_size
+  max_allocated_storage   = var.main_db.disk_max_size
+  storage_encrypted       = var.main_db.encrypted
+  backup_retention_period = var.backup_retention
 
   # Network
   db_subnet_group_name   = format("%s-%s", var.layer_metadata.project, var.layer_metadata.environment)
