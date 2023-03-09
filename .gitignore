@@ -6,6 +6,7 @@
 
 ### TFLint (e.g. plugins)
 .tflint.d
+.tflint.ok
 
 ### Vscode
 .vscode/

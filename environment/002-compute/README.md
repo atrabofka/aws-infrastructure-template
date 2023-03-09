@@ -22,9 +22,7 @@ No resources.
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_aws"></a> [aws](#input\_aws) | AWS configurations | <pre>object({<br>    region = string<br>    azs    = list(string)<br>  })</pre> | n/a | yes |
+No inputs.
 
 ## Outputs
 
