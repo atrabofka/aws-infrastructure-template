@@ -69,9 +69,9 @@ The following prerequisites SHOULD be available on any environment to work with 
 | [terraform-docs](https://github.com/terraform-docs/terraform-docs) | 0.16.0 |
 | [GNU Make](https://www.gnu.org/software/make/) | 3.81 |
 
-> NOTES:
-> RECOMMENDED prerequisites installation method on MacOS is `brew install`.
-> On a local workstation, Terraform is RECOMMENDED to be installed via `tfenv`
+> NOTES:  
+> RECOMMENDED prerequisites installation method on MacOS is `brew install`.  
+> On a local workstation, Terraform is RECOMMENDED to be installed via `tfenv`  
 
 After making sure that all prequisites are available, run the following command in the root directory:
 
