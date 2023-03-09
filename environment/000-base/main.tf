@@ -2,11 +2,11 @@ module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.18.1"
 
-  name = var.vpc.name
+  name = local.resource_prefix
   cidr = var.vpc.cidr
   azs  = var.aws.azs
 
-  private_subnets = format("%s-%s", var.layer_metadata.project, var.layer_metadata.environment)
+  private_subnets = var.vpc.private_subnets
   private_subnet_tags = {
     Tier = "Private subnet"
   }
@@ -22,7 +22,6 @@ module "vpc" {
   }
   create_database_subnet_group       = true
   create_database_subnet_route_table = true
-
 
   enable_nat_gateway   = true
   enable_dns_hostnames = true

@@ -2,7 +2,7 @@ module "main_db_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.16.1"
 
-  name        = var.main_db_security_group_name
+  name        = format("%s-maindb", local.resource_prefix)
   description = "Allow ingress to PostgreSQL only within VPC"
   vpc_id      = data.aws_vpc.main_db_vpc.id
 
