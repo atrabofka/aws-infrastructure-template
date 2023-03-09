@@ -14,7 +14,7 @@ Usage of SHOULD, MUST etc. keywords in this document MUST be compliant to [RFC 2
    3. [Branching](#branching)
 2. [Usage](#usage)
    1. [Setup](#setup)
-   2. [Documentation](#documentation)
+   2. [Common tasks](#common-tasks)
 
 ## Structure
 
@@ -54,6 +54,8 @@ The following list illustrates which modules/resources SHOULD be instantiated in
 
 Each environment shall be kept under a separate branch to facilite PR controlled flow of environment modifications.
 
+## Usage
+
 ### Setup
 
 The following prerequisites SHOULD be available on any environment to work with the project. Please refer to the respecvite tools documentation for installation steps.
@@ -76,7 +78,7 @@ After making sure that all prequisites are available, run the following command 
 $ make setup
 ```
 
-### Usage
+### Common tasks
 
 Use the following commands for common tasks
 
