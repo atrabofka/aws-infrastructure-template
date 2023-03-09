@@ -26,7 +26,7 @@ module "main_db" {
   source  = "terraform-aws-modules/rds/aws"
   version = "5.2.1"
 
-  identifier = var.main_db.name
+  identifier = format("%s-main", local.resource_prefix)
 
   # Database
   engine                              = "postgres"
@@ -42,7 +42,7 @@ module "main_db" {
   allocated_storage       = var.main_db.disk_size
   max_allocated_storage   = var.main_db.disk_max_size
   storage_encrypted       = var.main_db.encrypted
-  backup_retention_period = var.backup_retention
+  backup_retention_period = var.main_db.backup_retention
 
   # Network
   db_subnet_group_name   = format("%s-%s", var.layer_metadata.project, var.layer_metadata.environment)

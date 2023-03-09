@@ -54,8 +54,6 @@ The following list illustrates which modules/resources SHOULD be instantiated in
 
 Each environment shall be kept under a separate branch to facilite PR controlled flow of environment modifications.
 
-## Usage
-
 ### Setup
 
 The following prerequisites SHOULD be available on any environment to work with the project. Please refer to the respecvite tools documentation for installation steps.
@@ -78,11 +76,23 @@ After making sure that all prequisites are available, run the following command 
 $ make setup
 ```
 
-### Documentation
+### Usage
+
+Use the following commands for common tasks
 
 Generate modules & layers READMEs:
 ```sh
 make docs
 ```
 
-This MAY fail if there are no `*.tf` files in a module/layer directory.
+Run TFlint on environment layers
+```sh
+make tflint
+```
+
+Run tfsec on environment layers
+```sh
+make tfsec
+```
+
+These commands MAY fail if there are no `*.tf` files in a module/layer directory.
