@@ -38,7 +38,7 @@ variable "main_db" {
     disk_size          = number
     disk_max_size      = number
     backup_retention   = number
-    storage_encryption = bool
+    encrypted = bool
 
     # Network
     internet_gateway = bool
