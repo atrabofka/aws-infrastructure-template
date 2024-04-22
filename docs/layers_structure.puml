@@ -1,0 +1,86 @@
+@startuml layers_structure
+
+title Layers Structure
+
+frame "0-iam" as iam {
+  [Users] as users
+  [User Groups] as userGroups
+  [Roles] as roles
+
+  ' Layout
+  users -[hidden] userGroups
+  userGroups -[hidden] roles
+}
+
+frame "1-network" as network {
+  [VPC] as vpc
+  [Subnets] as subnets
+  [Route Tables] as routeTables
+  [Internet Gateways] as internetGateways
+  [NAT Gateways] as natGateways
+  [VPNs] as vpns
+
+  ' Layout
+  vpc -[hidden] subnets
+  subnets -[hidden] routeTables
+  routeTables -[hidden] internetGateways
+  internetGateways -[hidden] natGateways
+  natGateways -[hidden] vpns
+}
+
+frame "2-data" as data {
+  [AWS RDS] as rds
+  [AWS DocumentDB] as documentDb
+  [DynamoDB] as dynamoDb
+
+  ' Layout
+  rds -[hidden] documentDb
+  documentDb -[hidden] dynamoDb
+}
+
+frame "3-compute" as compute {
+  [AWS EC2] as ec2
+  [AWS ECS] as ecs
+  [EKS] as eks
+  [Fargate] as fargate
+
+  ' Layout
+  ec2 -[hidden] ecs
+  ecs -[hidden] eks
+  eks -[hidden] fargate
+}
+
+frame "4-ingress" as ingress {
+  [ALB] as alb
+  [NLB] as nlb
+  [GLB] as glb
+  [API Gateway] as apiGateway
+
+  ' Layout
+  alb -[hidden] alb
+  alb -[hidden] glb
+  glb -[hidden] apiGateway
+}
+
+frame "5-applications" as applications {
+  [Lambda] as lambda
+  [ECS resources] as ecsResources
+  [EKS resources] as eksResources
+
+  ' Layout
+  lambda -[hidden] ecsResources
+  ecsResources -[hidden] eksResources
+}
+
+' Layout
+' iam -[hidden]-> network
+' network -[hidden]-> data
+' data -[hidden]-> compute
+
+iam --> network
+network --> data
+data --> compute
+compute --> ingress
+ingress --> applications
+
+@enduml

@@ -30,9 +30,11 @@ init: $(LAYERS_TERRAFORM_DIRS)
 
 MODULES_READMES = $(foreach MODULE,$(MODULES),$(MODULE)/README.md)
 LAYERS_READMES = $(foreach LAYER,$(LAYERS),$(LAYER)/README.md)
+PUMLS = $(shell find . -name '*.puml' -type f)
+PNGS = $(patsubst %.puml,%.png,$(PUMLS))
 
 .PHONY: docs
-docs: $(MODULES_READMES) $(LAYERS_READMES)
+docs: $(MODULES_READMES) $(LAYERS_READMES) $(PNGS)
 	@echo "All READMEs are up-to-date!"
 
 ./modules/%/README.md : ./modules/%/*.tf
@@ -46,6 +48,9 @@ docs: $(MODULES_READMES) $(LAYERS_READMES)
 	@terraform-docs markdown $(subst /README.md,,$@) \
 		--output-file README.md \
 		--output-mode replace
+
+%.png: %.puml
+	@plantuml $<
 
 ### tflint
 # SHOULD be executed to validate TF code via TFLint
