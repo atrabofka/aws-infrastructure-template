@@ -86,6 +86,15 @@ These resources are the foundation of our infrastructure and must be created man
     * Partition key: `LockID`
     * Partition key type: `String`
 
+**IAM role for the CI/CD Pipeline**
+
+* **Name**: `<company>-iac-builder-role-<aws-account-id>
+* **Trusted Entity:**
+    * Create a custom trust policy for the GitHub OIDC provider.
+    * The trust policy will allow `token.actions.githubusercontent.com` to assume the role, with a condition that restricts it to your specific GitHub repository.
+* **Permissions:**
+    * Attach a permissions policy that grants access to your ECR registry (`ecr:*`), the S3 bucket and DynamoDB table we created (`s3:*`, `dynamodb:*`), and the ability to assume other IAM roles via `sts:AssumeRole`.
+
 ### Configure Your Local Environment
 
 Ensure you have Docker installed and your AWS credentials configured locally.
