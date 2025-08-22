@@ -1,83 +1,27 @@
-### Common variables used in most of the specific tasks
+# Your custom Docker image name and tag
+IMAGE_NAME = 666156116058.dkr.ecr.us-east-1.amazonaws.com/zealops/terragrunt:aws-0.1.0
 
-MODULES = $(shell find ./modules/* -maxdepth 1 -type d)
-LAYERS = $(shell find ./environment -name "[0-9]*" -maxdepth 1 -type d)
-LAYERS_TERRAFORM_DIRS = $(foreach LAYER,$(LAYERS),$(LAYER)/.terraform)
+# Base command for running Docker
+DOCKER_RUN = docker run --rm -it
 
-### setup
-# SHOULD be executed when the project is cloned for the 1st time.
-# All the prerequisites defined in the README MUST installed before.
+# The commands to run
+.PHONY: plan-%
+plan-%:
+	$(DOCKER_RUN) \
+		-v "$(shell pwd)/terraform/live/$*":/app/live/env \
+		-v "$(shell pwd)/terraform/modules":/app/modules \
+		-w /app/live/env $(IMAGE_NAME) terragrunt plan --all
 
-.PHONY: setup
-setup:
-	@lefthook install
-	@tflint --init
+.PHONY: apply-%
+apply-%:
+	$(DOCKER_RUN) \
+		-v "$(shell pwd)/terraform/live/$*":/app/live/env \
+		-v "$(shell pwd)/terraform/modules":/app/modules \
+		-w /app/live/env $(IMAGE_NAME) terragrunt apply --all
 
-### init
-# SHOULD be executed for `terraform init` in all environment layers
-
-.PHONY: init
-# init:
-init: $(LAYERS_TERRAFORM_DIRS)
-	@echo "All environment layers are initalized!"
-
-./environment/%/.terraform: ./environment/%/*.tf
-	@echo "Initializing $(dir $@)"
-	@cd $(dir $@); terraform init
-
-### docs
-# SHOULD be executed to update modules & environment layers READMEs
-
-MODULES_READMES = $(foreach MODULE,$(MODULES),$(MODULE)/README.md)
-LAYERS_READMES = $(foreach LAYER,$(LAYERS),$(LAYER)/README.md)
-PUMLS = $(shell find . -name '*.puml' -type f)
-PNGS = $(patsubst %.puml,%.png,$(PUMLS))
-
-.PHONY: docs
-docs: $(MODULES_READMES) $(LAYERS_READMES) $(PNGS)
-	@echo "All READMEs are up-to-date!"
-
-./modules/%/README.md : ./modules/%/*.tf
-	@echo "Running terraform-docs on $(dir $@)"
-	@terraform-docs markdown $(subst /README.md,,$@) \
-		--output-file README.md \
-		--output-mode replace
-
-./environment/%/README.md : ./environment/%/*.tf
-	@echo "Running terraform-docs on $(dir $@)"
-	@terraform-docs markdown $(subst /README.md,,$@) \
-		--output-file README.md \
-		--output-mode replace
-
-%.png: %.puml
-	@plantuml $<
-
-### tflint
-# SHOULD be executed to validate TF code via TFLint
-
-# Files indicating last successful TFlint execution in the layer
-LAYERS_TFLINT_OKS = $(foreach LAYER,$(LAYERS),$(LAYER)/.tflint.ok)
-
-.PHONY: tflint
-tflint: $(LAYERS_TFLINT_OKS)
-	@echo "All environment layers TFlint checks are up-to-date!"
-
-./environment/%/.tflint.ok: ./environment/%/*.tf
-	@echo "Running TFlint on $(dir $@)" 
-	@tflint --chdir=$(dir $@) --module
-	@touch $@
-
-### tfsec
-# SHOULD be executed to validate TF code via tfsec
-
-# Files indicating last successful TFlint execution in the layer
-LAYERS_TFSEC_OKS = $(foreach LAYER,$(LAYERS),$(LAYER)/.tfsec.ok)
-
-.PHONY: tfsec
-tfsec: $(LAYERS_TFSEC_OKS)
-	@echo "All environment layers tfsec checks are up-to-date!"
-
-./environment/%/.tfsec.ok: ./environment/%/*.tf
-	@echo "Running tfsec on $(dir $@)" 
-	@tfsec --config-file tfsec.yml --tfvars-file $(dir $@)/terraform.tfvars $(dir $@)
-	@touch $@
+.PHONY: validate-%
+validate-%:
+	$(DOCKER_RUN) \
+		-v "$(shell pwd)/terraform/live/$*":/app/live/env \
+		-v "$(shell pwd)/terraform/modules":/app/modules \
+		-w /app/live/env $(IMAGE_NAME) terragrunt validate --all

@@ -1,9 +1,0 @@
-pre-commit:
-  parallel: true
-  commands:
-    tflint:
-      run: make tflint
-    tfsec:
-      # Running only on directories with staged changes
-      # files: git diff --dirstat=files,0 HEAD~1 | sed -E 's/^[ 0-9.]+% //g'
-      run: make tfsec
