@@ -66,6 +66,32 @@ Purpose: To manage application deployments and their configurations. These direc
 
 To ensure a consistent and reproducible environment, all IaC commands should be run within the custom-built Docker image.
 
+### Manual AWS Setup
+
+These resources are the foundation of our infrastructure and must be created manually in the AWS Console. Make sure they are in place for the corresponding AWS account before running the IaC.
+
+**S3 Bucket for Terraform State**
+
+* **Name:** `<company>-iac-terraform-state-<aws-account-id>`
+* **Settings:**
+    * Enable Versioning.
+    * Enable Default encryption (AES-256).
+    * Ensure Block all public access is enabled.
+    * ACLs disabled.
+
+**DynamoDB Table for State Locking**
+
+* **Name:** `<company>-iac-terraform-locks-<aws-account-id>`
+* **Settings:**
+    * Partition key: `LockID`
+    * Partition key type: `String`
+
+### Configure Your Local Environment
+
+Ensure you have Docker installed and your AWS credentials configured locally.
+
+### Usage
+
 Build the Docker Image:
 
 ```sh
@@ -83,7 +109,6 @@ docker run --rm -it \
 ```
 
 Running commands via Makefile (simplified usage)
-◊
 ```sh
 make plan-<env>
 make apply-<env>
