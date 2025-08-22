@@ -1,100 +1,91 @@
 # AWS Infrastructure Template
 
-Generally inspired by:
-- discussions with Vardan Ghazaryan  
-- https://docs.rackspace.com/docs/fanatical-support-aws/managed-infra-as-code/tf_style  
-- https://www.conventionalcommits.org/en/v1.0.0-beta.4/#:~:text=The%20Conventional%20Commits%20specification%20is,automated%20tools%20on%20top%20of  
-- https://www.bacardi.com/
+1. [Core Principles](#core-principles)  
+2. [Directory Structure](#directory-structure)
+3. [Workflow](#workflow)
+4. [Getting Started](#getting-started)
 
-Usage of SHOULD, MUST etc. keywords in this document MUST be compliant to [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+This repository serves as the single source of truth for our cloud infrastructure and application deployments. It is organized to follow modern Infrastructure as Code (IaC) and GitOps best practices, ensuring a clear separation of concerns, reusability, and consistency across all environments.
 
-1. [Structure](#structure)  
-   1. [Modules](#modules)
-   2. [Environment](#environment)
-   3. [Branching](#branching)
-2. [Usage](#usage)
-   1. [Setup](#setup)
-   2. [Common tasks](#common-tasks)
+## 🧱 Core Principles
+The repository is built on three core principles:
 
-## Structure
+- IaC (Infrastructure as Code): All infrastructure is defined and managed in a declarative way using Terraform and Terragrunt.
+- GitOps: All application deployments are managed via a Git-centric workflow using Helm and ArgoCD, ensuring that the desired state in Git matches the state in the cluster.
+- DRY (Don't Repeat Yourself): Reusable code (Terraform modules and Helm charts) is centralized to minimize duplication and simplify maintenance.
 
-- `README.md`: high-level documentation of this repo
-- `Makefile`: scripts to launch common operations in the default way (e.g. generate docs)
-- `.gitignore`: files/folders that SHOULD be ignored by Git
-- `.tflint.hcl`: TFLint configuration files
-- `tfsec.yml`: tfsec configuration files
-- `./modules`: contains module sources which are specific to this project
-  - at some point some (or all) of them may be moved to their own git repos (depending on their size, usage, update frequency etc)
-- `./environment`: contains project infrastructure sources
-
-### Modules
-
-Each module SHOULD:
-- be kept in a separate directory named after the module (e.g. ecr-repo)
-- define the list of input variables (with sensibe default values) in a `variables.tf` file
-
-### Environment
-
-Environment shall be broken down to layers, each of them representing a logical subset of environment resources. Each layer SHOULD independently define configuration for all needed providers.
-
-Resources that are frequently modified together SHOULD be in the same layer, for example an EC2 instance, and its related IAM Role and policies SHOULD remain in a single layer.
-
-Smaller layers will limit blast radius and make Terraform state refreshes and updates quicker and safer.
-
-Each layer's name SHOULD be prefixed with a 3 digit number, defining the order of dependencies/data flow between layers (from lower to upper). E.g. 000-base SHOULD not reference anything in 100-data or 200-compute, and 100-data SHOULD not reference anything in 200-compute. 
-
-[Terraform data sources](https://developer.hashicorp.com/terraform/language/data-sources) SHOULD be used to access to other layer's state/resources. There MUST be no direct access to another layers.
-
-The following list illustrates which modules/resources SHOULD be instantiated in the suggested layers (treat this as a recommendation and extend/modify per project needs): 
-1. 000-base: VPC, Endpoints, Route53 Internal Zone, SSM Service Role, SNS, Peering, VPN, Transit Gateway, Custom IAM, Directory Service
-2. 100-data: RDS, DynamoDB, Elasticache, S3, EFS, Elasticsearch
-3. 200-compute: EC2, LBs, SQS
-
-### Branching
-
-Each environment shall be kept under a separate branch to facilite PR controlled flow of environment modifications.
-
-## Usage
-
-### Setup
-
-The following prerequisites SHOULD be available on any environment to work with the project. Please refer to the respecvite tools documentation for installation steps.
-
-> RECOMMENDED prerequisites installation method on MacOS is `brew install`.  
-> On a local workstation, Terraform is RECOMMENDED to be installed via `tfenv`  
-
-| Name | Version |
-| ---- | ------- |
-| [Terraform](https://www.terraform.io/) | 1.3.6 |
-| [Lefthook](https://github.com/evilmartians/lefthook) | 1.2.6 |
-| [tfsec](https://github.com/aquasecurity/tfsec) | 1.28.0 |
-| [TFLint](https://github.com/terraform-linters/tflint) | 0.43.0 |
-| [terraform-docs](https://github.com/terraform-docs/terraform-docs) | 0.16.0 |
-| [GNU Make](https://www.gnu.org/software/make/) | 3.81 |
-
-After making sure that all prequisites are available, run the following command in the root directory:
+## 🌳 Directory Structure
+The repository is organized into two primary, top-level directories: terraform and helm, reflecting the separation between infrastructure and applications.
 
 ```
-$ make setup
+.
+├── .github/             # GitHub Actions for CI/CD pipelines
+├── .gitignore
+├── README.md            # This README file
+├── Makefile             # Makefile for assisting 
+├── terraform/           # All Terragrunt and Terraform configurations
+│   ├── live/            # "Live" configurations for each environment
+│   │   ├── qa/
+│   │   │   ├── networking/
+│   │   │   ├── vpc/
+│   │   │   └── terragrunt.hcl
+│   │   └── prod/
+│   │       ├── networking/
+│   │       └── vpc/
+│   │       └── terragrunt.hcl
+│   └── modules/         # Reusable Terraform modules
+│       ├── vpc/
+│       │   └── main.tf
+│       └── eks/
+└── helm/                # All application configurations
+    ├── charts/          # Reusable Helm charts
+    │   ├── my-app/      # Base chart for a specific application
+    │   └── prometheus/  # Common third-party charts
+    └── live/            # "Live" configurations for each environment
+        ├── qa/
+        │   └── my-app.yaml  # Environment-specific values for `my-app`
+        └── prod/
+            └── my-app.yaml
 ```
 
-### Common tasks
+## 🚀 Workflow
 
-Use the following commands for common tasks
+### Infrastructure Management (Terraform & Terragrunt)
 
-Generate modules & layers READMEs:
+Location: `terraform/live/`
+
+Purpose: To deploy and manage foundational infrastructure such as VPCs, networking components, databases, and EKS clusters. This layer is managed using terragrunt run-all commands.
+
+### Application Deployment (Helm & ArgoCD)
+
+Location: `helm/live/`
+
+Purpose: To manage application deployments and their configurations. These directories are monitored by ArgoCD, which automatically syncs any changes to the respective Kubernetes clusters, ensuring a seamless GitOps workflow.
+
+## 🛠️ Getting Started
+
+To ensure a consistent and reproducible environment, all IaC commands should be run within the custom-built Docker image.
+
+Build the Docker Image:
+
 ```sh
-make docs
+docker build -t zealops/terragrunt:aws-latest .
 ```
 
-Run TFlint on environment layers
+Run a `command` using the image for some `environment`:
+
 ```sh
-make tflint
+docker run --rm -it \
+    -v "$(pwd)/terraform/live/<environment>":/app/live/env \
+    -v "$(pwd)/terraform/modules":/app/modules \
+    -w /app/live/env \
+    zealops/terragrunt:aws-latest <command>
 ```
 
-Run tfsec on environment layers
+Running commands via Makefile (simplified usage)
+◊
 ```sh
-make tfsec
+make plan-<env>
+make apply-<env>
+make validate-<env>
 ```
-
-These commands MAY fail if there are no `*.tf` files in a module/layer directory.
