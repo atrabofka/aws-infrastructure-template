@@ -38,14 +38,15 @@ The repository is organized into two primary, top-level directories: terraform a
 │       │   └── main.tf
 │       └── eks/
 └── helm/                # All application configurations
-    ├── charts/          # Reusable Helm charts
-    │   ├── my-app/      # Base chart for a specific application
-    │   └── prometheus/  # Common third-party charts
-    └── live/            # "Live" configurations for each environment
-        ├── qa/
-        │   └── my-app.yaml  # Environment-specific values for `my-app`
-        └── prod/
-            └── my-app.yaml
+│   ├── charts/          # Reusable Helm charts
+│   │   ├── my-app/      # Base chart for a specific application
+│   │   └── prometheus/  # Common third-party charts
+│   └── live/            # "Live" configurations for each environment
+│       ├── qa/
+│       │   └── my-app.yaml  # Environment-specific values for  `my-app`
+|       └── prod/
+|           └── my-app.yaml
+└── bootstrap/            # Boilerplate configurations for manual AWS setup
 ```
 
 ## 🚀 Workflow
@@ -72,7 +73,7 @@ These resources are the foundation of our infrastructure and must be created man
 
 **S3 Bucket for Terraform State**
 
-* **Name:** `<company>-iac-terraform-state-<aws-account-id>`
+* **Name:** `<aws-account-id>-<company>-iac-terraform-state`
 * **Settings:**
     * Enable Versioning.
     * Enable Default encryption (AES-256).
@@ -81,19 +82,21 @@ These resources are the foundation of our infrastructure and must be created man
 
 **DynamoDB Table for State Locking**
 
-* **Name:** `<company>-iac-terraform-locks-<aws-account-id>`
+* **Name:** `<company>-iac-terraform-locks`
 * **Settings:**
     * Partition key: `LockID`
     * Partition key type: `String`
 
 **IAM role for the CI/CD Pipeline**
 
-* **Name**: `<company>-iac-builder-role-<aws-account-id>
+* **Name**: `<company>-iac-terraform-builder`
 * **Trusted Entity:**
     * Create a custom trust policy for the GitHub OIDC provider.
     * The trust policy will allow `token.actions.githubusercontent.com` to assume the role, with a condition that restricts it to your specific GitHub repository.
+    * Please refer to the `./bootstrap/iac-terraform-builder-trust-policy.json` for example structure.
 * **Permissions:**
     * Attach a permissions policy that grants access to your ECR registry (`ecr:*`), the S3 bucket and DynamoDB table we created (`s3:*`, `dynamodb:*`), and the ability to assume other IAM roles via `sts:AssumeRole`.
+    * Please refer to the `./bootstrap/iac-terraform-builder-policy.json` for example structure.
 
 ### Configure Your Local Environment
 
