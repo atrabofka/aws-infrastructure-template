@@ -16,5 +16,5 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::666156116058:role/zealous-iac-builder-role
+          role-to-assume: arn:aws:iam::666156116058:role/zealous-iac-terraform-builder
           aws-region: us-east-1

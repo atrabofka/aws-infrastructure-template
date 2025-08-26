@@ -19,8 +19,8 @@
         "s3:PutObject"
       ],
       "Resource": [
-        "arn:aws:s3:::<your-company>-iac-terraform-state-<your-account-id>",
-        "arn:aws:s3:::<your-company>-iac-terraform-state-<your-account-id>/*"
+        "arn:aws:s3:::<aws-account-id>-<company>-iac-terraform-state",
+        "arn:aws:s3:::<aws-account-id>-<company>-iac-terraform-state/*"
       ]
     },
     {
@@ -30,7 +30,7 @@
         "dynamodb:PutItem",
         "dynamodb:DeleteItem"
       ],
-      "Resource": "arn:aws:dynamodb:<aws-region>:<aws-account-id>:table/terraform-locks"
+      "Resource": "arn:aws:dynamodb:<aws-region>:<aws-account-id>:table/<company>-iac-terraform-locks"
     }
   ]
 }
