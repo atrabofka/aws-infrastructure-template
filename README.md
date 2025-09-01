@@ -63,6 +63,27 @@ Location: `helm/live/`
 
 Purpose: To manage application deployments and their configurations. These directories are monitored by ArgoCD, which automatically syncs any changes to the respective Kubernetes clusters, ensuring a seamless GitOps workflow.
 
+### Tagging
+
+Consistent and accurate tagging is a mandatory requirement for all AWS resources provisioned by our company. This policy enables accurate cost allocation, improves resource management, and strengthens our security posture. Please see the mandatory and optional tags below.
+
+Mandatory tags
+| Tag Key | Description | Example Values |
+| :--- | :--- | :--- |
+| **`Name`** | A unique, human-readable name for the resource. | `api-gateway-prod-customers`, `lambda-user-profile`, `s3-docs-project-alpha` |
+| **`Application`** | The specific application or project the resource belongs to. | `project-alpha`, `internal-crm`, `billing-service`, `client-portal` |
+| **`Owner`** | The name or alias of the individual or team responsible for the resource. | `janedoe`, `team-b`, `infrastructure-team` |
+| **`CostCenter`** | The high-level department or business unit that the resource's cost should be allocated to. | `software-engineering`, `marketing`, `data-science` |
+| **`ManagedBy`** | The name of the team or tool responsible for the technical management and lifecycle of the resource. | `terraform`, `cloudformation`, `devops-team` |
+
+Optional tags
+| Tag Key | Description | Example Values |
+| :--- | :--- | :--- |
+| **`Environment`** | The deployment environment of the resource. |	`prod`, `dev`, `test`, `staging` |
+| **`Lifecycle`** |	The life stage or automation policy for a resource.	| `persistent`, `ephemeral`, `review-date:2025-12-31` |
+| **`Automation`** | A flag for automated scripts to include or exclude a resource.	| `no-stop`, `no-delete` |
+| **`Compliance`** | The security or regulatory compliance level of the resource. | `internal`, `pci`, `hipaa`, `confidential` |
+
 ## 🛠️ Getting Started
 
 To ensure a consistent and reproducible environment, all IaC commands should be run within the custom-built Docker image.
@@ -126,3 +147,6 @@ make plan-<env>
 make apply-<env>
 make validate-<env>
 ```
+
+
+arn:aws:iam::666156116058:oidc-provider/token.actions.githubusercontent.com
