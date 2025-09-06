@@ -1,10 +1,10 @@
 # AWS Infrastructure Template
 
-1. [Core Principles](#core-principles)  
-2. [Directory Structure](#directory-structure)
-3. [Workflow](#workflow)
-4. [Setup](#setup)
-5. [Usage](#usage)
+1. [Core Principles](#-core-principles)  
+2. [Directory Structure](#-directory-structure)
+3. [Workflow](#-workflow)
+4. [Setup](#-setup)
+5. [Usage](#-usage)
 
 This repository serves as the single source of truth for our cloud infrastructure and application deployments. It is organized to follow modern Infrastructure as Code (IaC) and GitOps best practices, ensuring a clear separation of concerns, reusability, and consistency across all environments.
 
