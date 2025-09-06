@@ -8,8 +8,16 @@ IMAGE_NAME = 666156116058.dkr.ecr.us-east-1.amazonaws.com/zealops/terragrunt:aws
 # Directory containing Terragrunt configurations
 TERRAGRUNT_DIR = terraform/live
 
+# Detect if running in CI
+# GitHub Actions automatically sets CI=true
+ifeq ($(CI),true)
+    DOCKER_TTY=
+else
+    DOCKER_TTY=-t
+endif
+
 # Command to run Terragrunt inside Docker
-TERRAGRUNT_RUN = docker run --rm -it \
+TERRAGRUNT_RUN = docker run --rm -i $(DOCKER_TTY) \
 	-e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
 	-e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
 	$(if $(AWS_SESSION_TOKEN),-e AWS_SESSION_TOKEN=$(AWS_SESSION_TOKEN)) \
