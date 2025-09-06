@@ -16,6 +16,9 @@ generate "provider" {
   contents  = <<EOF
     provider "aws" {
       region = "${local.region}"
+      default_tags {
+        tags = ${jsonencode(local.tags)}
+      }
     }
   EOF
 }
@@ -25,9 +28,10 @@ remote_state {
   config = {
     bucket         = "666156116058-zealous-iac-terraform-state"
     key            = "${path_relative_to_include()}/terraform.tfstate"
-    region         = local.region
+    region         = "us-west-2"
     encrypt        = true
     dynamodb_table = "zealous-iac-terraform-lock"
+    disable_bucket_update = true
   }
 
   generate = {

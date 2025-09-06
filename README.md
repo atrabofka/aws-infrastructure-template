@@ -3,7 +3,8 @@
 1. [Core Principles](#core-principles)  
 2. [Directory Structure](#directory-structure)
 3. [Workflow](#workflow)
-4. [Getting Started](#getting-started)
+4. [Setup](#setup)
+5. [Usage](#usage)
 
 This repository serves as the single source of truth for our cloud infrastructure and application deployments. It is organized to follow modern Infrastructure as Code (IaC) and GitOps best practices, ensuring a clear separation of concerns, reusability, and consistency across all environments.
 
@@ -84,7 +85,7 @@ Optional tags
 | **`Automation`** | A flag for automated scripts to include or exclude a resource.	| `no-stop`, `no-delete` |
 | **`Compliance`** | The security or regulatory compliance level of the resource. | `internal`, `pci`, `hipaa`, `confidential` |
 
-## 🛠️ Getting Started
+## 🛠️ Setup
 
 To ensure a consistent and reproducible environment, all IaC commands should be run within the custom-built Docker image.
 
@@ -123,7 +124,9 @@ These resources are the foundation of our infrastructure and must be created man
 
 Ensure you have Docker installed and your AWS credentials configured locally.
 
-### Usage
+## 💻 Usage
+
+### Docker image
 
 Build the Docker Image:
 
@@ -131,22 +134,35 @@ Build the Docker Image:
 docker build -t zealops/terragrunt:aws-latest .
 ```
 
-Run a `command` using the image for some `environment`:
+### Lifecycle commands
 
+The Makefile uses pattern rules to run Terragrunt commands on a specific environment. Replace [env] with the desired environment name (e.g., dev, staging, prod).
+
+**Initialize:** Initializes Terragrunt and the Terraform backend for the specified environment.
 ```sh
-docker run --rm -it \
-    -v "$(pwd)/terraform/live/<environment>":/app/live/env \
-    -v "$(pwd)/terraform/modules":/app/modules \
-    -w /app/live/env \
-    zealops/terragrunt:aws-latest <command>
+make init-<env>
 ```
 
-Running commands via Makefile (simplified usage)
+**Plan:** Generates a plan showing what changes will be made to the infrastructure.
 ```sh
 make plan-<env>
+```
+
+**Apply:** Applies the planned changes to the infrastructure.
+```sh
 make apply-<env>
+```
+
+**Validate:** Validates the Terragrunt and Terraform code for syntax and logical consistency.
+```sh
 make validate-<env>
 ```
 
+### Utility commands
 
-arn:aws:iam::666156116058:oidc-provider/token.actions.githubusercontent.com
+The Makefile includes several utility commands for maintenance and development. These commands do not require AWS credentials to run.
+
+**Clean:** Removes all Terragrunt caches and local Terraform files (.terragrunt-cache/, .terraform/, and .terraform.lock.hcl) for a specified environment. This is useful for troubleshooting.
+```sh
+make clean-<env>
+```
