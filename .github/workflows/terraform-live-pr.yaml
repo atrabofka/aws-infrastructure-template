@@ -1,0 +1,49 @@
+name: Terraform Live PR validation
+
+on:
+  pull_request:
+    paths:
+      - 'terraform/live/**'
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      changed_envs: ${{ steps.filter.outputs.changes }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            qa:
+              - 'terraform/live/qa/**'
+            prod:
+              - 'terraform/live/prod/**'
+
+  validate:
+    needs: detect
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        env: ${{ fromJSON(needs.detect.outputs.changed_envs) }}
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::666156116058:role/zealous-iac-terraform-builder
+          aws-region: us-east-1
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Run Dockerized Terragrunt plan via Makefile
+        run: |
+          make plan-${{ matrix.env }}
