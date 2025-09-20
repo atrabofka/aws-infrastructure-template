@@ -25,6 +25,10 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Run Dockerized Terragrunt init via Makefile
+      # - name: Run Dockerized Terragrunt init via Makefile
+      #   run: |
+      #     make init-qa
+
+      - name: Run Dockerized Terragrunt validate via Makefile
         run: |
-          make init-qa
+          make validate-qa
