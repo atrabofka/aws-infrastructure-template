@@ -2,16 +2,25 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Effect": "Allow",
-      "Action": [
-        "ecr:GetAuthorizationToken",
-        "ecr:BatchCheckLayerAvailability",
-        "ecr:GetDownloadUrlForLayer",
-        "ecr:BatchGetImage"
-      ],
-      "Resource": "*"
-    },
+			"Sid": "AllowECRAuth",
+			"Effect": "Allow",
+			"Action": [
+				"ecr:GetAuthorizationToken"
+			],
+			"Resource": "*"
+		},
+		{
+		  "Sid": "AllowPullForSpecificRepo",
+			"Effect": "Allow",
+			"Action": [
+				"ecr:BatchCheckLayerAvailability",
+				"ecr:GetDownloadUrlForLayer",
+				"ecr:BatchGetImage"
+			],
+			"Resource": "arn:aws:ecr:<aws-region>:<aws-account-id>:repository/<ecr-repository-name>"
+		},
     {
+      "Sid": "AllowAccessForSpecificBucket",
       "Effect": "Allow",
       "Action": [
         "s3:ListBucket",
@@ -24,6 +33,7 @@
       ]
     },
     {
+      "Sid": "AllowAccessForSpecificTable",
       "Effect": "Allow",
       "Action": [
         "dynamodb:GetItem",

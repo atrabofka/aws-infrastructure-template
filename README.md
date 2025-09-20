@@ -1,10 +1,18 @@
+<!-- omit in toc -->
 # AWS Infrastructure Template
 
-1. [Core Principles](#-core-principles)  
-2. [Directory Structure](#-directory-structure)
-3. [Workflow](#-workflow)
-4. [Setup](#-setup)
-5. [Usage](#-usage)
+- [🧱 Core Principles](#-core-principles)
+- [🌳 Directory Structure](#-directory-structure)
+- [📖 Workflow](#-workflow)
+  - [Infrastructure Management (Terraform \& Terragrunt)](#infrastructure-management-terraform--terragrunt)
+  - [Application Deployment (Helm \& ArgoCD)](#application-deployment-helm--argocd)
+  - [Tagging](#tagging)
+- [🛠️ Setup](#️-setup)
+  - [Manual AWS Setup](#manual-aws-setup)
+  - [Configure Your Local Environment](#configure-your-local-environment)
+- [💻 Usage](#-usage)
+  - [Lifecycle commands](#lifecycle-commands)
+  - [Utility commands](#utility-commands)
 
 This repository serves as the single source of truth for our cloud infrastructure and application deployments. It is organized to follow modern Infrastructure as Code (IaC) and GitOps best practices, ensuring a clear separation of concerns, reusability, and consistency across all environments.
 
@@ -23,9 +31,10 @@ The repository is organized into two primary, top-level directories: terraform a
 ├── .github/             # GitHub Actions for CI/CD pipelines
 ├── .gitignore
 ├── README.md            # This README file
-├── Makefile             # Makefile for assisting 
+├── Makefile             # Project Makefile for common tasks
+├── bootstrap/           # Boilerplate configurations for manual AWS setup
 ├── terraform/           # All Terragrunt and Terraform configurations
-│   ├── live/            # "Live" configurations for each environment
+│   ├── live/            # Environment-specific infrastructure configs
 │   │   ├── qa/
 │   │   │   ├── networking/
 │   │   │   ├── vpc/
@@ -38,19 +47,18 @@ The repository is organized into two primary, top-level directories: terraform a
 │       ├── vpc/
 │       │   └── main.tf
 │       └── eks/
-└── helm/                # All application configurations
+└── helm/                # All application deployment settings
 │   ├── charts/          # Reusable Helm charts
 │   │   ├── my-app/      # Base chart for a specific application
 │   │   └── prometheus/  # Common third-party charts
-│   └── live/            # "Live" configurations for each environment
+│   └── live/            # Environment-specific applications
 │       ├── qa/
 │       │   └── my-app.yaml  # Environment-specific values for  `my-app`
 |       └── prod/
 |           └── my-app.yaml
-└── bootstrap/            # Boilerplate configurations for manual AWS setup
 ```
 
-## 🚀 Workflow
+## 📖 Workflow
 
 ### Infrastructure Management (Terraform & Terragrunt)
 
@@ -125,14 +133,6 @@ These resources are the foundation of our infrastructure and must be created man
 Ensure you have Docker installed and your AWS credentials configured locally.
 
 ## 💻 Usage
-
-### Docker image
-
-Build the Docker Image:
-
-```sh
-docker build -t zealops/terragrunt:aws-latest .
-```
 
 ### Lifecycle commands
 
