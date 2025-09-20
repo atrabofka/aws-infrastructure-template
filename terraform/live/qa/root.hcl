@@ -30,7 +30,7 @@ remote_state {
     key            = "${path_relative_to_include()}/terraform.tfstate"
     region         = "us-west-2"
     encrypt        = true
-    dynamodb_table = "zealous-iac-terraform-lock"
+    dynamodb_table = "zealous-iac-terraform-locks"
     disable_bucket_update = true
   }
 

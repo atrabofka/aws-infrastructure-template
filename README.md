@@ -33,7 +33,16 @@ The repository is organized into two primary, top-level directories: terraform a
 ├── README.md            # This README file
 ├── Makefile             # Project Makefile for common tasks
 ├── bootstrap/           # Boilerplate configurations for manual AWS setup
-├── terraform/           # All Terragrunt and Terraform configurations
+├── helm/                # All application deployment settings
+│   ├── charts/          # Reusable Helm charts
+│   │   ├── my-app/      # Base chart for a specific application
+│   │   └── prometheus/  # Common third-party charts
+│   └── live/            # Environment-specific applications
+│       ├── qa/
+│       │   └── my-app.yaml  # Environment-specific values for  `my-app`
+|       └── prod/
+|           └── my-app.yaml
+└── terraform/           # All Terragrunt and Terraform configurations
 │   ├── live/            # Environment-specific infrastructure configs
 │   │   ├── qa/
 │   │   │   ├── networking/
@@ -47,15 +56,6 @@ The repository is organized into two primary, top-level directories: terraform a
 │       ├── vpc/
 │       │   └── main.tf
 │       └── eks/
-└── helm/                # All application deployment settings
-│   ├── charts/          # Reusable Helm charts
-│   │   ├── my-app/      # Base chart for a specific application
-│   │   └── prometheus/  # Common third-party charts
-│   └── live/            # Environment-specific applications
-│       ├── qa/
-│       │   └── my-app.yaml  # Environment-specific values for  `my-app`
-|       └── prod/
-|           └── my-app.yaml
 ```
 
 ## 📖 Workflow
