@@ -9,8 +9,8 @@ terraform {
 inputs = {
 
   aws = {
-    region = "us-east-1"
-    azs    = ["us-east-1a", "us-east-1b"]
+    region = "us-west-1"
+    azs    = ["us-west-1a", "us-west-1b"]
   }
 
   vpc = {
