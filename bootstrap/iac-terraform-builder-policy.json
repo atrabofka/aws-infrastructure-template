@@ -28,8 +28,8 @@
         "s3:PutObject"
       ],
       "Resource": [
-        "arn:aws:s3:::<aws-account-id>-<company>-iac-terraform-state",
-        "arn:aws:s3:::<aws-account-id>-<company>-iac-terraform-state/*"
+        "arn:aws:s3:::<aws-account-id>-<company>-iac-terraform-states",
+        "arn:aws:s3:::<aws-account-id>-<company>-iac-terraform-states/*"
       ]
     },
     {

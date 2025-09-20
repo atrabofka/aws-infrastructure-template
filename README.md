@@ -80,14 +80,15 @@ Mandatory tags
 | Tag Key | Description | Example Values |
 | :--- | :--- | :--- |
 | **`Name`** | A unique, human-readable name for the resource. | `api-gateway-prod-customers`, `lambda-user-profile`, `s3-docs-project-alpha` |
-| **`Application`** | The specific application or project the resource belongs to. | `project-alpha`, `internal-crm`, `billing-service`, `client-portal` |
-| **`Owner`** | The name or alias of the individual or team responsible for the resource. | `janedoe`, `team-b`, `infrastructure-team` |
-| **`CostCenter`** | The high-level department or business unit that the resource's cost should be allocated to. | `software-engineering`, `marketing`, `data-science` |
+| **`Owner`** | The individual or team responsible for the resource. | `janedoe`, `team-b`, `infrastructure-team` |
+| **`BusinessUnit`** | The high-level department or division that organizationally owns the resource. | `engineering`, `qa`, `ai` |
+| **`CostCenter`** | The project, team, or initiative responsible for the resource's costs. | `project-name-x`, `team-y` |
 | **`ManagedBy`** | The name of the team or tool responsible for the technical management and lifecycle of the resource. | `terraform`, `cloudformation`, `devops-team` |
 
 Optional tags
 | Tag Key | Description | Example Values |
 | :--- | :--- | :--- |
+| **`Application`** | The application or project the resource belongs to. | `project-alpha`, `internal-crm`, `billing-service`, `client-portal` |
 | **`Environment`** | The deployment environment of the resource. |	`prod`, `dev`, `test`, `staging` |
 | **`Lifecycle`** |	The life stage or automation policy for a resource.	| `persistent`, `ephemeral`, `review-date:2025-12-31` |
 | **`Automation`** | A flag for automated scripts to include or exclude a resource.	| `no-stop`, `no-delete` |
@@ -103,7 +104,7 @@ These resources are the foundation of our infrastructure and must be created man
 
 **S3 Bucket for Terraform State**
 
-* **Name:** `<aws-account-id>-<company>-iac-terraform-state`
+* **Name:** `<aws-account-id>-<company>-iac-terraform-states`
 * **Settings:**
     * Enable Versioning.
     * Enable Default encryption (AES-256).
