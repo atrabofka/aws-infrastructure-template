@@ -44,6 +44,18 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Run Dockerized Terragrunt init via Makefile
+        run: |
+          make init-${{ matrix.env }}
+
+      - name: Run Dockerized Terragrunt hch format check via Makefile
+        run: |
+          make fmt-check-${{ matrix.env }}
+
+      - name: Run Dockerized Terragrunt validate via Makefile
+        run: |
+          make validate-${{ matrix.env }}
+
       - name: Run Dockerized Terragrunt plan via Makefile
         run: |
           make plan-${{ matrix.env }}

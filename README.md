@@ -135,35 +135,29 @@ Ensure you have Docker installed and your AWS credentials configured locally.
 
 ## 💻 Usage
 
-### Lifecycle commands
-
 The Makefile uses pattern rules to run Terragrunt commands on a specific environment. Replace [env] with the desired environment name (e.g., dev, staging, prod).
 
-**Initialize:** Initializes Terragrunt and the Terraform backend for the specified environment.
-```sh
-make init-<env>
-```
+### Lifecycle commands
 
-**Plan:** Generates a plan showing what changes will be made to the infrastructure.
-```sh
-make plan-<env>
-```
+The Makefile includes several utility commands for infrastructure management. These commands require AWS credentials to run.
 
-**Apply:** Applies the planned changes to the infrastructure.
-```sh
-make apply-<env>
-```
-
-**Validate:** Validates the Terragrunt and Terraform code for syntax and logical consistency.
-```sh
-make validate-<env>
-```
+| Action                   | Command               | Description                                                                                                         |
+| ------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Init environment**     | `make init-<env>`     | Initializes the Terraform working directory for the specified environment and downloads required modules/providers. |
+| **Plan environment**     | `make plan-<env>`     | Shows planned infrastructure changes for the specified environment without applying them.                           |
+| **Apply environment**    | `make apply-<env>`    | Applies pending infrastructure changes for the specified environment.                                               |
+| **Validate environment** | `make validate-<env>` | Checks that Terraform code for the specified environment is syntactically and semantically correct.                 |
 
 ### Utility commands
 
 The Makefile includes several utility commands for maintenance and development. These commands do not require AWS credentials to run.
 
-**Clean:** Removes all Terragrunt caches and local Terraform files (.terragrunt-cache/, .terraform/, and .terraform.lock.hcl) for a specified environment. This is useful for troubleshooting.
-```sh
-make clean-<env>
-```
+| Action                       | Command                  | Description                                                                                                                           |
+| ---------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| **Clean environment**        | `make clean-<env>`       | Removes Terragrunt caches and local Terraform files (`.terragrunt-cache/`, `.terraform/`, `.terraform.lock.hcl`) for troubleshooting. |
+| **Format environment**       | `make fmt-<env>`         | Automatically formats all Terragrunt live configuration files for the specified environment.                                          |
+| **Format modules**           | `make fmt-modules`       | Automatically formats all Terraform modules.                                                                                          |
+| **Format environments & modules**           | `make fmt`       | Automatically formats all Terraform modules and Terragrunt live configuration filesfor all environments.                                                                                          |
+| **Check environment format** | `make fmt-check-<env>`   | Checks Terragrunt live configuration formatting for the specified environment without modifying files; fails if issues are found.     |
+| **Check modules format**     | `make fmt-check-modules` | Checks Terraform modules formatting without modifying files; fails if issues are found.                                               |
+| **Check environments & modules format**     | `make fmt-check` | Checks Terraform modules formatting without modifying files and Terragrunt live configuration formatting for all environments; fails if issues are found. 

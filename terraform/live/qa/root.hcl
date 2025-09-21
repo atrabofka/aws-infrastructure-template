@@ -1,5 +1,5 @@
 locals {
-  region = "us-east-1"
+  region      = "us-east-1"
   environment = "qa"
   tags = {
     Environment = local.environment
@@ -26,11 +26,11 @@ generate "provider" {
 remote_state {
   backend = "s3"
   config = {
-    bucket         = "666156116058-zealous-iac-terraform-states"
-    key            = "aws-infrastructure-template/${path_relative_to_include()}/terraform.tfstate"
-    region         = "us-east-1"
-    encrypt        = true
-    dynamodb_table = "zealous-iac-terraform-locks"
+    bucket                = "666156116058-zealous-iac-terraform-states"
+    key                   = "aws-infrastructure-template/${path_relative_to_include()}/terraform.tfstate"
+    region                = "us-east-1"
+    encrypt               = true
+    dynamodb_table        = "zealous-iac-terraform-locks"
     disable_bucket_update = true
   }
 
@@ -41,6 +41,6 @@ remote_state {
 }
 
 inputs = {
-  tags = local.tags
+  tags   = local.tags
   region = local.region
 }
