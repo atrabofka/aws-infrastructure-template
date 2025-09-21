@@ -3,7 +3,7 @@
 # ===============================================
 
 # Your custom Docker image name and tag
-IMAGE_NAME = 666156116058.dkr.ecr.us-east-1.amazonaws.com/zealops/terragrunt:aws-0.1.0
+IMAGE_NAME = 666156116058.dkr.ecr.us-east-1.amazonaws.com/zealous/terragrunt:aws-0.1.0
 
 # Directory containing Terragrunt configurations
 TERRAGRUNT_DIR = terraform/live
